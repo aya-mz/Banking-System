@@ -1,11 +1,12 @@
-package account.command;
+package account.Accountcommand;
 
 import account.Account;
 import account.AccountType;
+import core.Command;
 
 import java.time.LocalDateTime;
 
-public class ChangeType implements command {
+public class ChangeType implements Command {
 
     private Account account;
     private AccountType oldType;
@@ -18,7 +19,7 @@ public class ChangeType implements command {
     }
 
     @Override
-    public void excute() {
+    public void execute() {
         account.setType(newType);
         account.setUpdateAt(LocalDateTime.now());
         System.out.println("change type success you change type from "+ oldType+" to " + newType);
@@ -31,7 +32,7 @@ public class ChangeType implements command {
 
     @Override
     public void redo() {
-        excute();
+        execute();
     }
 
 

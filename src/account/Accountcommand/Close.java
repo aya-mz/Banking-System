@@ -1,13 +1,14 @@
-package account.command;
+package account.Accountcommand;
 
 import account.Account;
 import account.AccountState;
 import account.AccountType;
 import account.inmemmory;
+import core.Command;
 
 import java.time.LocalDateTime;
 
-public class Close implements command{
+public class Close implements Command {
 Account account ;
 inmemmory inmemmory;
     public Close(Account account , inmemmory inmemmory){
@@ -15,7 +16,7 @@ inmemmory inmemmory;
         this.inmemmory=inmemmory;
     }
     @Override
-    public void excute() {
+    public void execute() {
         closevalidation();
         account.setState(AccountState.CLOSE);
         account.setUpdateAt(LocalDateTime.now());
@@ -51,9 +52,7 @@ inmemmory inmemmory;
          }
 
 
-         throw new IllegalArgumentException(
-                 "cant close account with child accounts"
-         );}
+
 
     }
-}
+}}

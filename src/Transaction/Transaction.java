@@ -1,40 +1,54 @@
 package Transaction;
 
 import account.Account;
+import account.AccountType;
 
 import java.time.LocalDateTime;
 
 public class Transaction {
     int transaction_id;
 
-    Account account ;
+     Account reciveaccount ;
+     Account senderaccount ;
+    public TransactionType type;
     double amount ;
-    int re_account_id;
-    int teller_id ;
+
+    int user_id;
 
     private LocalDateTime createdAt;
 
-    Transaction(double ammount , int re_account_id , int teller_id , Account account){
-      this.teller_id = teller_id;
-        this.account = account;
+    public Transaction(double ammount, int user_id, Account reciveaccount, Account senderaccount, TransactionType type){
+      this.user_id = user_id;
+        this.reciveaccount = reciveaccount;
         this.amount=ammount;
-        this.re_account_id = re_account_id;
+        this.senderaccount = senderaccount;
         this.createdAt =  LocalDateTime.now();
+        this.type = type;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public int getRe_account_id() {
-        return re_account_id;
+    public Account getReciveaccount() {
+        return reciveaccount;
+    }
+
+    public Account getSenderaccount() {
+        return senderaccount;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 
     public int getTransaction_id() {
         return transaction_id;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+
 }
