@@ -1,11 +1,12 @@
-package account.command;
+package account.Accountcommand;
 
 import account.Account;
 import account.AccountState;
 import account.AccountType;
 import account.inmemmory;
+import core.Command;
 
-public class Craete  implements command{
+public class Craete  implements Command {
     Account account;
     inmemmory inmemmory;
     public Craete(Account account  , inmemmory inmemmory ){
@@ -14,7 +15,7 @@ public class Craete  implements command{
     }
 
     @Override
-    public void excute() {
+    public void execute() {
         createvalidation();
         inmemmory.save(account);
         System.out.println("the account create successfully ! the pin code for your account is " +account.getPin_code());

@@ -1,10 +1,11 @@
-package account.command;
+package account.Accountcommand;
 
 import account.Account;
+import core.Command;
 
 import java.time.LocalDateTime;
 
-public class ChangePinCode implements command {
+public class ChangePinCode implements Command {
 
     private Account account;
     private int oldPin;
@@ -17,7 +18,7 @@ public class ChangePinCode implements command {
     }
 
     @Override
-    public void excute() {
+    public void execute() {
         account.setPin_code(newPin);
         account.setUpdateAt(LocalDateTime.now());
         System.out.println("change  pin from "+ oldPin+"to " + newPin);
@@ -31,6 +32,6 @@ public class ChangePinCode implements command {
 
     @Override
     public void redo() {
-        excute();
+        execute();
     }
 }

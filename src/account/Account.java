@@ -16,7 +16,6 @@ public class Account {
     private LocalDateTime updateAt;
 
     public Account(int user_id, String name, AccountType type, double balance , int parent_id) {
-
         this.balance = balance;
         this.user_id = user_id;
         this.Pin_code = generatePin();
@@ -58,6 +57,10 @@ public class Account {
 
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public int getParent_id() {

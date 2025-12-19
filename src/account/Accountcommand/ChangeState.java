@@ -1,11 +1,12 @@
-package account.command;
+package account.Accountcommand;
 
 import account.Account;
 import account.AccountState;
+import core.Command;
 
 import java.time.LocalDateTime;
 
-public class ChangeState implements     command {
+public class ChangeState implements Command {
 
     private Account account;
     private AccountState oldState;
@@ -18,7 +19,7 @@ public class ChangeState implements     command {
     }
 
     @Override
-    public void excute() {
+    public void execute() {
         if (newState == AccountState.CLOSE)
         {
             throw new IllegalArgumentException("the change can't be close try again!");
@@ -36,6 +37,6 @@ public class ChangeState implements     command {
 
     @Override
     public void redo() {
-        excute();
+        execute();
     }
 }
