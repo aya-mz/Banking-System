@@ -1,5 +1,9 @@
 package core.user;
 
+import approval.AdminHandler;
+import approval.ManagerHandler;
+import approval.TellerHandler;
+
 public class UserTest {
     public void test1(){
         AuthInfo auth = new AuthInfo("password1234");
@@ -25,7 +29,20 @@ public class UserTest {
         } else {
             System.out.println("AuthInfo test failed");
         }
+        TellerHandler teller=new TellerHandler();
+        ManagerHandler manager=new ManagerHandler();
+        AdminHandler admin=new AdminHandler();
+          teller.setNext(manager);
+        manager.setNext(admin);
 
+        System.out.println("=== APPROVAL TEST ===");
+
+        double[] amounts = {500, 2000, 7000}; // مبالغ للاختبار
+
+        for (double amount : amounts) {
+            boolean approved = teller.approve(user, "WITHDRAW", amount);
+            System.out.println("Amount " + amount + " approved for role " + user.getRole() + "? " + approved);
+        }
         UserRepository repo = new UserRepository();
 
         repo.save(user);
