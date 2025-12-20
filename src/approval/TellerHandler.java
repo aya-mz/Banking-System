@@ -1,21 +1,26 @@
 package approval;
 
-import core.user.Role;
-import core.user.User;
+import account.AccountState;
+
 
 public class TellerHandler extends ApprovalHandler {
 
     @Override
-    public boolean approve(User user, String operation, double amount) {
-        if (amount <= 0) return false;
-        if(user.getRole()== Role.TELLER && amount <1000){
-            return true;
-        }
-    if (next != null) {
-        return next.approve(user, operation, amount);
-        
-    }
-    return false;
+    public boolean approve(ApprovalRequest request) {
+      if (request.getTransaction().getSenderaccount().getState() != AccountState.ACTIVE){
+          System.out.println("❌ Account not active");
+          return false;
+      }
+      if (request.getPinCode() != request.getTransaction().getSenderaccount().getPin_code()){
+          System.out.println("❌ Wrong PIN");
+          return false;
+      }
+      double amount=request.getTransaction().getAmount();
+      if (request.getTransaction().getSenderaccount().getBalance()<amount){
+          System.out.println("❌ Insufficient balance");
+          return false;
+      }
+        return passToNext(request);
     }
     
 }

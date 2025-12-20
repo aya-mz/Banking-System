@@ -1,18 +1,19 @@
 package approval;
 
 import core.user.Role;
-import core.user.User;
+
 
 public class AdminHandler  extends ApprovalHandler{
-
     @Override
-    public boolean approve(User user, String operation, double amount) {
-         if (amount <= 0) return false;
-        if(user.getRole()== Role.ADMIN){
-            return true;
-        }
+    public boolean approve(ApprovalRequest request) {
+        if (request.getUser().getRole() != Role.ADMIN &&
+                request.getTransaction().getAmount() > 10000) {
 
-    return false;
+            System.out.println("❌ Admin approval required");
+            return false;
+        }
+        System.out.println("✅ Admin approval passed");
+        return true;
     }
     
 }
