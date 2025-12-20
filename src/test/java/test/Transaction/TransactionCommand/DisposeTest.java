@@ -1,7 +1,6 @@
-package Transaction.test;
+package Transaction.TransactionCommand;
 
 import Transaction.*;
-import Transaction.TransactionCommand.Dispose;
 import account.Account;
 import account.AccountType;
 import org.junit.jupiter.api.BeforeEach;

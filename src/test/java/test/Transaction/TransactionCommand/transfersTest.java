@@ -1,6 +1,5 @@
-package Transaction.test;
+package Transaction.TransactionCommand;
 
-import Transaction.TransactionCommand.transfers;
 import account.*;
 import Transaction.Transaction;
 import Transaction.TransactionType;

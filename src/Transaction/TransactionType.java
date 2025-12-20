@@ -1,5 +1,5 @@
 package Transaction;
 
 public enum TransactionType {
-    DISPOSE , TRANSFER , withdrawals
+    DISPOSE , TRANSFER , withdrawals , PAPAL,LEGACY_BANK
 }

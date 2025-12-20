@@ -1,7 +1,6 @@
-package Transaction.test;
+package Transaction.TransactionCommand;
 
 import Transaction.Transaction;
-import Transaction.TransactionCommand.withdrawals;
 import Transaction.TransactionType;
 import account.Account;
 import account.AccountType;
