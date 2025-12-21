@@ -4,6 +4,8 @@ import account.Account;
 import account.AccountType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transaction {
     int transaction_id;
@@ -50,5 +52,17 @@ public class Transaction {
         return transaction_id;
     }
 
+//    public List<String> toReportData() {
+//        List<String> summary = new ArrayList<>();
+//        summary.add(
+//                "ID: " + transaction_id +
+//                        ", Type: " + type +
+//                        ", Amount: " + amount +
+//                        ", Sender: " + senderaccount.getAccount_id() +
+//                        ", Receiver: " + reciveaccount.getAccount_id() +
+//                        ", Date: " + createdAt
+//        );
+//        return summary;
+//    }
 
 }

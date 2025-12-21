@@ -1,9 +1,11 @@
 package account;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class inmemmory {
 
@@ -29,6 +31,49 @@ public class inmemmory {
         return accounts;
     }
 
+
+
+    public int allAccountCount() {
+        return accounts.size();
+    }
+
+
+    public int todayAccountCount() {
+        LocalDate today = LocalDate.now();
+        int count = 0;
+        for (Account account : accounts.values())
+        { if (account.getCreatedAt() != null
+                && account.getCreatedAt().toLocalDate()
+                .equals(today)) {
+            count++;
+        }
+        }
+        return count;
+    }
+
+    public int todayAccountCountupdate() {
+        LocalDate today = LocalDate.now();
+        int count = 0;
+        for (Account account : accounts.values())
+        {
+            if (account.getUpdateAt() != null
+                    && account.getUpdateAt().toLocalDate().
+                    equals(today))
+            {
+                count++;
+            }
+        } return count;
+    }
+
+    public List<String> getAccountsSummary() {
+        return accounts.values().stream()
+                .map(a -> "ID: " + a.getAccount_id() +
+                        ", Owner: " + a.getName() +
+                        ", Balance: " + a.getBalance() +
+                        ", Created: " + a.getCreatedAt() +
+                        ", LastUpdated: " + a.getUpdateAt())
+                .collect(Collectors.toList());
+    }
 
     public List<Account> findAllChildren(int parentId) {
         List<Account> result = new ArrayList<>();
