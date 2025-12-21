@@ -6,53 +6,55 @@ import account.AccountType;
 import account.inmemmory;
 import core.Command;
 
-import java.time.LocalDateTime;
-
-public class Close implements Command {
-Account account ;
-inmemmory inmemmory;
-    public Close(Account account , inmemmory inmemmory){
-        this.account=account;
-        this.inmemmory=inmemmory;
+public class Craete  implements Command {
+    Account account;
+    inmemmory inmemmory;
+    public Craete(Account account  , inmemmory inmemmory ){
+        this.account = account;
+        this.inmemmory = inmemmory;
     }
+
     @Override
     public void execute() {
-        closevalidation();
-        account.setState(AccountState.CLOSE);
-        account.setUpdateAt(LocalDateTime.now());
-        System.out.println("Account closed successfully");
+        createvalidation();
+        inmemmory.save(account);
+        System.out.println("the account create successfully ! the pin code for your account is " +account.getPin_code());
     }
 
     @Override
     public void redo() {
-        throw new IllegalArgumentException("cant redo close!");
+        inmemmory.save(account);
+
     }
 
     @Override
     public void undo() {
-        throw new IllegalArgumentException("cant undo close!");
+        inmemmory.delete(account.getAccount_id());
+
     }
 
- void  closevalidation(){
-        if(account.getBalance()>0 && account.getType() != AccountType.LOAN){
-            throw new IllegalArgumentException("you should dispose "+account.getBalance()+" first!");
+    void createvalidation(){
+        if(account.getName() == null || account.getName().isEmpty()){
+            throw new IllegalArgumentException("the name is required!");
         }
-     var children = inmemmory.findAllChildren(account.getAccount_id());
-     if (!children.isEmpty()) {
-
-
-         for (Account child : children) {
-             if (child.getState() == AccountState.ACTIVE) {
-                 throw new IllegalArgumentException(
-                         "cant close account while child account "
-                                 + child.getAccount_id()
-                                 + " is ACTIVE"
-                 );
-             }
-         }
-
-
-
-
+        if(null == account.getType()){
+            throw new IllegalArgumentException("the type is required!");
+        }
+        // AccountGroup يمكن أن يكون رصيده 0 (المجموعات تبدأ بصفر)
+        boolean isGroup = account instanceof account.AccountGroup;
+        if(account.getBalance() < 100 && account.getType() != AccountType.LOAN && !isGroup){
+            throw new IllegalArgumentException("the balance should be 100 or more !");
+        }
+        if(account.getBalance() < 0){
+            throw new IllegalArgumentException("the balance should be 0 or more !");
+        }
+        if (account.getParent_id() != 0) {
+            Account parent = inmemmory.findById(account.getParent_id());
+            if (parent == null) {
+                throw new IllegalArgumentException("Parent account not found");
+            }
+            if (parent.getState().isClosed()) {
+                throw new IllegalArgumentException("Parent account is closed");
+            }}
     }
-}}
+}

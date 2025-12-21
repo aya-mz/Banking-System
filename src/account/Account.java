@@ -1,6 +1,8 @@
 package account;
 
+import account.states.ActiveState;
 import java.time.LocalDateTime;
+
 
 public class Account {
     private int account_id;
@@ -9,22 +11,21 @@ public class Account {
     boolean is_parent;
     int parent_id;
     AccountType type;
-    AccountState state;
+    AccountStateInterface state;
     String name;
     int Pin_code;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 
-    public Account(int user_id, String name, AccountType type, double balance , int parent_id) {
+    public Account(int user_id, String name, AccountType type, double balance, int parent_id) {
         this.balance = balance;
         this.user_id = user_id;
         this.Pin_code = generatePin();
         this.name = name;
-        this.state = AccountState.ACTIVE;
+        this.state = ActiveState.getInstance();  // الحالة الافتراضية: نشط
         this.type = type;
         this.parent_id = parent_id;
         this.createdAt = LocalDateTime.now();
-
     }
 
     public int getAccount_id() {
@@ -67,21 +68,45 @@ public class Account {
         return parent_id;
     }
 
-    public AccountState getState() {
+    public AccountStateInterface getState() {
         return state;
     }
-
 
     public void setType(AccountType type) {
         this.type = type;
     }
 
-    public void setState(AccountState state) {
+    public void setState(AccountStateInterface state) {
         this.state = state;
+        this.updateAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
     }
 
     public void setUpdateAt(LocalDateTime updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public boolean isIs_parent() {
+        return is_parent;
+    }
+
+    public void setIs_parent(boolean is_parent) {
+        this.is_parent = is_parent;
     }
 
     @Override
@@ -91,16 +116,12 @@ public class Account {
                 ", balance=" + balance +
                 ", user_id=" + user_id +
                 ", type=" + type +
-                ", state=" + state +
+                ", state=" + (state != null ? state.getName() : "null") +
                 ", name='" + name + '\'' +
                 ", parent_id=" + parent_id +
                 ", Pin_code=" + Pin_code +
-                ", CreateAt =" +createdAt+
-                " , UpdateAt = " + updateAt+
+                ", CreateAt=" + createdAt +
+                ", UpdateAt=" + updateAt +
                 '}';
-
     }
-
-
 }
-//  ", is_parent=" + is_parent +
