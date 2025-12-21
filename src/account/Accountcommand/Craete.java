@@ -48,7 +48,7 @@ public class Craete  implements Command {
             if (parent == null) {
                 throw new IllegalArgumentException("Parent account not found");
             }
-            if (parent.getState() == AccountState.CLOSE) {
+            if (parent.getState().isClosed()) {
                 throw new IllegalArgumentException("Parent account is closed");
             }}
     }
