@@ -29,3 +29,12 @@ bin/
 .DS_Store
 
 .idea/
+# Logs
+*.log
+
+# Reports
+*_report.xml
+
+# Build
+target/
+*.class
