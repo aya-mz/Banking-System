@@ -9,6 +9,14 @@ public class AuditLogObserver implements TransactionObserver {
 
     private final List<String> logs = new ArrayList<>();
 
+    static {
+        try (FileWriter fw = new FileWriter("audit.log", false)) {
+            fw.write(""); // clear once per JVM run
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onTransaction(TransactionEvent event) {
         logs.add(

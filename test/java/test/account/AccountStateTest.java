@@ -2,6 +2,7 @@ package account;
 
 import Transaction.dispatcher.TransactionDispatcher;
 import Transaction.observer.AuditLogObserver;
+import Transaction.observer.NotificationObserver;
 import Transaction.observer.TransactionEventPublisher;
 import account.states.ActiveState;
 import account.states.ClosedState;
@@ -16,7 +17,10 @@ public class AccountStateTest {
 
         TransactionEventPublisher publisher = new TransactionEventPublisher();
         AuditLogObserver audit = new AuditLogObserver();
+        NotificationObserver notification = new NotificationObserver();
+
         publisher.subscribe(audit);
+        publisher.subscribe(notification);
 
         TransactionDispatcher dispatcher =
                 new TransactionDispatcher(publisher);

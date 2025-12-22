@@ -8,6 +8,14 @@ import java.util.List;
 public class NotificationObserver implements TransactionObserver {
     private List<String> notifications = new ArrayList<>();
 
+    static {
+        try (FileWriter fw = new FileWriter("notification.log", false)) {
+            fw.write(""); // clear once per JVM run
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onTransaction(TransactionEvent event) {
         notifications.add(
