@@ -1,0 +1,25 @@
+DISPOSE | Dispose transaction executed
+DISPOSE_REDO | Dispose operation redone
+DISPOSE_UNDO | Dispose operation undone
+ACCOUNT_CREATED | Account ID = 1
+INTEREST_APPLIED | Saving interest applied
+WITHDRAW_REDO | Withdraw operation redone
+WITHDRAW_UNDO | Withdraw operation undone
+WITHDRAW_EXECUTED | Money withdrawn from account
+TICKET_PROCESS | Ticket process has been 
+TICKET_PROCESS | Ticket process has been 
+REPORT_GENERATED | PDF report generated
+REPORT_GENERATED | PDF report generated
+INTEREST_APPLIED | Loan interest applied
+TRANSFER_EXECUTED | Money transferred from sender to receiver
+TRANSFER_REDO | Transfer operation redone
+TRANSFER_UNDO | Transfer operation undone
+FEATURE_ADDED | Insurance feature added
+WITHDRAW | Withdraw with overdraft
+SCHEDULED_INTEREST | Monthly interest executed
+SCHEDULED_INTEREST | Monthly interest executed
+APPROVAL_CHECK | Admin approval granted
+APPROVAL_CHECK | Approval failed: wrong PIN
+APPROVAL_CHECK | Approval validation executed
+APPROVAL_CHECK | Approval failed: insufficient balance
+DEPOSIT | Deposit with cashback feature

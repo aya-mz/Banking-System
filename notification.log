@@ -1,0 +1,12 @@
+DISPOSE | Dispose transaction executed
+DISPOSE_REDO | Dispose operation redone
+DISPOSE_UNDO | Dispose operation undone
+ACCOUNT_CREATED | Account ID = 1
+WITHDRAW_REDO | Withdraw operation redone
+WITHDRAW_UNDO | Withdraw operation undone
+WITHDRAW_EXECUTED | Money withdrawn from account
+TRANSFER_EXECUTED | Money transferred from sender to receiver
+TRANSFER_REDO | Transfer operation redone
+TRANSFER_UNDO | Transfer operation undone
+WITHDRAW | Withdraw with overdraft
+DEPOSIT | Deposit with cashback feature
