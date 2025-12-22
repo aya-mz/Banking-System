@@ -1,7 +1,5 @@
 package account.Accountcommand;
 
-import core.Command;
-
 import java.util.ArrayList;
 import java.util.List;
 

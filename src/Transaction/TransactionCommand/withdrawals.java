@@ -1,11 +1,11 @@
 package Transaction.TransactionCommand;
 
 import Transaction.Transaction;
-import core.Command;
+import account.Accountcommand.Command;
 
 import java.util.logging.Logger;
 
-public class withdrawals implements Command {
+public class withdrawals implements TransactionCommand {
     Transaction transaction ;
     private static final Logger logger =
             Logger.getLogger(withdrawals.class.getName());
@@ -32,5 +32,10 @@ public class withdrawals implements Command {
     @Override
     public void redo() {
       execute();
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return transaction;
     }
 }

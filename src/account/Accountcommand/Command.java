@@ -1,4 +1,4 @@
-package core;
+package account.Accountcommand;
 
 public interface Command {
     void execute();

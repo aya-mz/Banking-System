@@ -52,7 +52,14 @@ public class Transaction {
         return transaction_id;
     }
 
-//    public List<String> toReportData() {
+    public void setTransaction_id(int transaction_id) {
+        this.transaction_id = transaction_id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    //    public List<String> toReportData() {
 //        List<String> summary = new ArrayList<>();
 //        summary.add(
 //                "ID: " + transaction_id +

@@ -1,17 +1,18 @@
 package Transaction.TransactionCommand;
 
 import Transaction.Transaction;
-import core.Command;
+import account.Accountcommand.Command;
 
 import java.util.logging.Logger;
 
-public class Dispose implements Command {
+public class Dispose implements TransactionCommand {
 
     public  Dispose ( Transaction transaction ){
         this.transaction = transaction;
     }
     Transaction transaction ;
      double oldbalance ;
+
     private static final Logger logger =
             Logger.getLogger(Dispose.class.getName());
 // receiver account use
@@ -31,5 +32,10 @@ public class Dispose implements Command {
     @Override
     public void redo() {
       execute();
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return transaction;
     }
 }

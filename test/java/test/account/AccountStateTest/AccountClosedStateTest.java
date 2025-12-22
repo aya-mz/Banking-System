@@ -1,5 +1,5 @@
 
-package account;
+package java.test.account.AccountStateTest;
 
 import account.Account;
 import account.AccountType;

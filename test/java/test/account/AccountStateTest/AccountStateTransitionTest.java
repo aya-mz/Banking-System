@@ -1,5 +1,7 @@
-package account;
+package java.test.account.AccountStateTest;
 
+import account.Account;
+import account.AccountType;
 import account.Accountcommand.ChangeState;
 import account.states.ActiveState;
 import account.states.FrozenState;

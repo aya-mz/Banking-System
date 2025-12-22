@@ -2,8 +2,6 @@ package account.Accountcommand;
 
 import account.Account;
 import account.AccountStateInterface;
-import account.states.ClosedState;
-import core.Command;
 
 import java.time.LocalDateTime;
 

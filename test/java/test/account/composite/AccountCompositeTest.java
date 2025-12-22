@@ -1,7 +1,10 @@
-package account;
+package java.test.account.composite;
 
 import Transaction.dispatcher.TransactionDispatcher;
 import Transaction.observer.TransactionEventPublisher;
+import account.Account;
+import account.AccountGroup;
+import account.AccountType;
 import account.states.ClosedState;
 import Transaction.observer.AuditLogObserver;
 import org.junit.jupiter.api.Test;

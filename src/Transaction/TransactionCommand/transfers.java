@@ -1,12 +1,12 @@
 package Transaction.TransactionCommand;
 
 import Transaction.Transaction;
-import core.Command;
+import account.Accountcommand.Command;
 
 import java.util.logging.Logger;
 
 
-public class transfers implements Command {
+public class transfers implements TransactionCommand {
 
     private Transaction transaction;
     private double senderOldBalance;
@@ -45,5 +45,10 @@ public class transfers implements Command {
     @Override
     public void redo() {
         execute();
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return transaction;
     }
 }

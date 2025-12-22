@@ -2,11 +2,11 @@ package Transaction.TransactionCommand;
 
 import Transaction.Adapter.paymantUi;
 import Transaction.Transaction;
-import core.Command;
+import account.Accountcommand.Command;
 
 import java.util.logging.Logger;
 
-public class payment implements Command {
+public class payment implements TransactionCommand {
 
     private Transaction transaction;
     private paymantUi paymentSystem;
@@ -32,5 +32,10 @@ public class payment implements Command {
 
     @Override public void redo() {
         execute();
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return transaction;
     }
 }
