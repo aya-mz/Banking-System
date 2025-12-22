@@ -1,5 +1,8 @@
 package Transaction.observer;
 
+import infrastructure.audit.AuditWriter;
+import infrastructure.audit.FileAuditWriter;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,14 +11,7 @@ import java.util.List;
 public class AuditLogObserver implements TransactionObserver {
 
     private final List<String> logs = new ArrayList<>();
-
-    static {
-        try (FileWriter fw = new FileWriter("audit.log", false)) {
-            fw.write(""); // clear once per JVM run
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private final AuditWriter writer = new FileAuditWriter();
 
     @Override
     public void onTransaction(TransactionEvent event) {
@@ -26,14 +22,11 @@ public class AuditLogObserver implements TransactionObserver {
                         + " | "
                         + event.getDescription()
         );
-        try (FileWriter fw = new FileWriter("audit.log", true)) {
-            fw.write(
-                    event.getType() + " | " +
-                            event.getDescription() + "\n"
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.write(
+                event.getTimestamp()
+                        + " | " + event.getType()
+                        + " | " + event.getDescription()
+        );
     }
 
     public List<String> getLogs() {

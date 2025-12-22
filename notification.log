@@ -9,4 +9,5 @@ TRANSFER_EXECUTED | Money transferred from sender to receiver
 TRANSFER_REDO | Transfer operation redone
 TRANSFER_UNDO | Transfer operation undone
 WITHDRAW | Withdraw with overdraft
+DEPOSIT | Deposit on active account
 DEPOSIT | Deposit with cashback feature
