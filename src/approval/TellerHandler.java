@@ -1,7 +1,5 @@
 package approval;
 
-import account.AccountStateInterface;
-
 
 public class TellerHandler extends ApprovalHandler {
 

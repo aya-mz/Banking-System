@@ -10,3 +10,4 @@ TRANSFER_REDO | Transfer operation redone
 TRANSFER_UNDO | Transfer operation undone
 WITHDRAW | Withdraw with overdraft
 DEPOSIT | Deposit with cashback feature
+DEPOSIT | Deposit with cashback feature

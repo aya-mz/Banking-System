@@ -23,3 +23,11 @@ APPROVAL_CHECK | Approval failed: wrong PIN
 APPROVAL_CHECK | Approval validation executed
 APPROVAL_CHECK | Approval failed: insufficient balance
 DEPOSIT | Deposit with cashback feature
+DEPOSIT | Deposit on active account
+APPROVAL_CHECK | Admin approval granted
+APPROVAL_CHECK | Approval failed: wrong PIN
+APPROVAL_CHECK | Approval validation executed
+APPROVAL_CHECK | Approval failed: insufficient balance
+INTEREST_APPLIED | Loan interest applied
+DEPOSIT | Deposit with cashback feature
+DEPOSIT | Deposit on active account
