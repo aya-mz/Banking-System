@@ -1,4 +1,5 @@
 package Facad;
+
 import Transaction.*;
 import Transaction.Adapter.*;
 import Transaction.Facad.Facad;
@@ -17,8 +18,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import static org.mockito.Mockito.*;
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class FacadTest {
 
@@ -40,20 +43,15 @@ class FacadTest {
     void setup() {
         MockitoAnnotations.openMocks(this);
 
-        // إنشاء repository خارجي ومشارك للاختبارات
         txRepo = new TransactionRepository();
-
-        // Facad يستخدم repository الخارجي
         facade = new Facad(txRepo);
 
-        // Mock الحساب والمعاملة
         sender = new Account(1, "Sender", AccountType.CHECKING, 15000, 1234);
         receiver = new Account(2, "Receiver", AccountType.SAVING, 1000, 0);
 
         adminUser = new User(1, "admin@test.com", Role.ADMIN, new AuthInfo("admin123"), null);
         normalUser = new User(2, "user@test.com", Role.CUSTOMER, new AuthInfo("user123"), null);
 
-        // إنشاء Approval Chain
         ApprovalHandler teller = new TellerHandler();
         ApprovalHandler manager = new ManagerHandler();
         ApprovalHandler admin = new AdminHandler();
@@ -61,7 +59,6 @@ class FacadTest {
         manager.setNext(admin);
         chain = teller;
 
-        // Mock transaction
         when(mockTransaction.getReciveaccount()).thenReturn(mockAccount);
         when(mockTransaction.getAmount()).thenReturn(100.0);
     }
@@ -87,7 +84,7 @@ class FacadTest {
         verify(mockAccount, times(1)).getBalance();
         verify(mockAccount, times(1)).setBalance(anyDouble());
         assertEquals(1, audit.getLogs().size());
-        assertEquals(1, txRepo.findAll().size()); // تم تعديل getAll() إلى findAll()
+        assertEquals(1, txRepo.findAll().size());
     }
 
     @Test
@@ -123,18 +120,110 @@ class FacadTest {
     }
 
     @Test
-    void testRegisterNewTransactionType() {
-        TransactionType NEW_TYPE = TransactionType.valueOf("VISA");
-        Transaction newTx = new Transaction(50, 1, receiver, sender, NEW_TYPE);
+    void testRegisterTransactionType_existingType() {
+        Transaction mockTx = mock(Transaction.class);
+        when(mockTx.getType()).thenReturn(TransactionType.PAPAL);
+        when(mockTx.getReciveaccount()).thenReturn(receiver);
+        when(mockTx.getAmount()).thenReturn(50.0);
 
-        facade.registerTransactionType(
-                NEW_TYPE,
-                t -> new payment(t, new paypalAdapter(new paypal()))
-        );
+        facade.registerTransactionType(TransactionType.PAPAL,
+                t -> new payment(t, new paypalAdapter(new paypal())));
 
-        facade.processTransaction(newTx);
+        facade.processTransaction(mockTx);
 
         assertEquals(1, txRepo.findAll().size());
-        assertEquals(NEW_TYPE, txRepo.findAll().get(0).getType());
+        assertSame(mockTx, txRepo.findAll().get(0));
+    }
+
+    @Test
+    void testProcessTransaction_unregisteredType() {
+        Transaction mockTx = mock(Transaction.class);
+        when(mockTx.getType()).thenReturn(null);
+        when(mockTx.getReciveaccount()).thenReturn(receiver);
+        when(mockTx.getAmount()).thenReturn(50.0);
+
+        facade.processTransaction(mockTx);
+
+        assertEquals(0, txRepo.findAll().size());
+    }
+
+    @Test
+    void testAuditLog_OnRejection() {
+        Transaction tx = new Transaction(99999, 1, receiver, sender, TransactionType.TRANSFER);
+        ApprovalRequest request = new ApprovalRequest(tx, normalUser, 0000); // PIN خاطئ
+
+        facade.processTransactionWithApproval(tx, request, chain);
+
+        assertEquals(0, txRepo.findAll().size(), "المستودع يجب أن يكون فارغاً عند الرفض");
+        assertTrue(facade.commands.isEmpty());
+    }
+    @Test
+    void testProcessTransaction_LegacyBank() {
+        Transaction tx = new Transaction(1000, 1, receiver, sender, TransactionType.LEGACY_BANK);
+
+        facade.processTransaction(tx);
+
+        assertFalse(facade.commands.isEmpty());
+        assertEquals(1, txRepo.findAll().size());
+        assertEquals(TransactionType.LEGACY_BANK, txRepo.findAll().get(0).getType());
+    }
+    @Test
+    void testUndoLast_WhenNoCommandsExist() {
+        assertDoesNotThrow(() -> {
+            facade.undoLast();
+        }, "يجب ألا يرمي استثناء إذا كانت قائمة العمليات فارغة");
+    }
+    @Test
+    void testUndoMultipleTransactions() {
+        Transaction tx1 = new Transaction(100, 1, receiver, sender, TransactionType.DISPOSE);
+        Transaction tx2 = new Transaction(200, 1, receiver, sender, TransactionType.DISPOSE);
+
+        facade.processTransaction(tx1);
+        facade.processTransaction(tx2);
+        assertEquals(2, txRepo.findAll().size());
+
+        facade.undoLast();
+
+        assertEquals(1, txRepo.findAll().size());
+        assertEquals(tx1, txRepo.findAll().get(0), "يجب أن تبقى المعاملة الأولى فقط");
+    }
+    @Test
+    void testProcessTransaction_Dispose() {
+        Account acc = new Account(3, "Test", AccountType.CHECKING, 1000, 1234);
+        Transaction tx = new Transaction(500, 1, acc, null, TransactionType.DISPOSE);
+
+        facade.processTransaction(tx);
+
+        assertEquals(1500, acc.getBalance(), "الرصيد يجب أن يزداد بعد عملية الإيداع");
+        assertEquals(1, txRepo.findAll().size());
+    }
+
+    @Test
+    void testProcessTransaction_Transfer() {
+        sender.setBalance(1000);
+        receiver.setBalance(500);
+        Transaction tx = new Transaction(300, 1, receiver, sender, TransactionType.TRANSFER);
+
+        facade.processTransaction(tx);
+
+        assertEquals(694, sender.getBalance());
+        assertEquals(800, receiver.getBalance());
+        assertEquals(1, txRepo.findAll().size());
+    }
+    @Test
+    void testProcessTransaction_UnknownType_BranchCoverage() {
+        Transaction unknownTx = mock(Transaction.class);
+        when(unknownTx.getType()).thenReturn(null);
+
+        facade.processTransaction(unknownTx);
+
+        assertEquals(0, txRepo.findAll().size(), "يجب عدم حفظ المعاملة إذا كان النوع مجهولاً");
+        assertTrue(facade.commands.isEmpty(), "يجب ألا يضاف أي أمر للقائمة");
+    }
+
+    @Test
+    void testUndoLast_EmptyList_BranchCoverage() {
+
+        assertDoesNotThrow(() -> facade.undoLast());
     }
 }

@@ -22,7 +22,7 @@ public class Account {
         this.user_id = user_id;
         this.Pin_code = generatePin();
         this.name = name;
-        this.state = ActiveState.getInstance();  // الحالة الافتراضية: نشط
+        this.state = ActiveState.getInstance();
         this.type = type;
         this.parent_id = parent_id;
         this.createdAt = LocalDateTime.now();
@@ -64,6 +64,10 @@ public class Account {
         this.balance = balance;
     }
 
+    public void setParent_id(int parent_id) {
+        this.parent_id = parent_id;
+    }
+
     public int getParent_id() {
         return parent_id;
     }
@@ -97,17 +101,7 @@ public class Account {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
 
-    public boolean isIs_parent() {
-        return is_parent;
-    }
-
-    public void setIs_parent(boolean is_parent) {
-        this.is_parent = is_parent;
-    }
 
     @Override
     public String toString() {
@@ -116,7 +110,7 @@ public class Account {
                 ", balance=" + balance +
                 ", user_id=" + user_id +
                 ", type=" + type +
-                ", state=" + (state != null ? state.getName() : "null") +
+                ", state=" +  state.getName() +
                 ", name='" + name + '\'' +
                 ", parent_id=" + parent_id +
                 ", Pin_code=" + Pin_code +

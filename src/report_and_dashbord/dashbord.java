@@ -14,7 +14,6 @@ public class dashbord {
     private TransactionRepository transactionRepository;
     private AuditLogObserver auditObserver;
 
-    // الـ Constructor لربط جميع المستودعات
     public dashbord(ReportGenerateStrategy strategy,
                     TicketRepository ticketRepo,
                     inmemmory accountRepo,
@@ -27,34 +26,27 @@ public class dashbord {
         this.auditObserver = auditObserver;
     }
 
-    // 1. وظيفة خاصة لتقرير الحسابات فقط
+
     public void generateAccountReport(String fileName) {
         AccountDashboard accDash = new AccountDashboard(accountRepository, reportGenerateStrategy);
-        List<String> data = accDash.getFullReport();
-        reportGenerateStrategy.generate(fileName, data);
+        accDash.exportReport(fileName);
     }
 
-    // 2. وظيفة خاصة لتقرير التذاكر فقط
     public void generateTicketReport(String fileName) {
         TicketDashboard ticketDash = new TicketDashboard(ticketRepository, reportGenerateStrategy);
-        List<String> data = ticketDash.getTicketsFullSummary();
-        reportGenerateStrategy.generate(fileName, data);
+       ticketDash.exportTicketReport(fileName);
     }
 
-    // 3. وظيفة خاصة لتقرير المعاملات المالية فقط
     public void generateTransactionReport(String fileName) {
         TransactionDashboard txDash = new TransactionDashboard(transactionRepository, reportGenerateStrategy);
-        List<String> data = txDash.getFullTransactionReportData();
-        reportGenerateStrategy.generate(fileName, data);
+      txDash.generateFinalReport(fileName);
     }
 
-    // 4. وظيفة خاصة لتقرير سجل الرقابة (Audit Log) فقط
     public void generateAuditReport(String fileName) {
         AudiLogDashboard auditDash = new AudiLogDashboard(auditObserver, reportGenerateStrategy);
         auditDash.generateAuditReport(fileName);
     }
 
-    // --- ميثودات الإحصائيات السريعة (Getters) ---
     public int totalTickets() {
         return ticketRepository.getTotalTickets();
     }

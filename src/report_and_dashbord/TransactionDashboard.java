@@ -17,7 +17,6 @@ public class TransactionDashboard {
     public List<String> getFullTransactionReportData() {
         List<String> report = new ArrayList<>();
 
-        // 1. قسم الإحصائيات (Stats Section)
         report.add("====================================");
         report.add("      TRANSACTIONAL DASHBOARD       ");
         report.add("====================================");

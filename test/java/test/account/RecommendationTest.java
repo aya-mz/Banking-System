@@ -24,5 +24,17 @@ public class RecommendationTest {
                 strategy.recommend(feature)
         );
     }
+    @Test
+    void recommendationSavingAccount() {
 
+        Account acc = new Account(1,"VIP", AccountType.SAVING,1000,0);
+        AccountFeature feature = new AccountFeatureAdapter(acc);
+
+        RecommendationStrategy strategy = new BankingRecommendationStrategy();
+
+        assertEquals(
+                "Standard Saving Account is sufficient",
+                strategy.recommend(feature)
+        );
+    }
 }

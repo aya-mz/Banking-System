@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CashbackFeatureTest {
 
@@ -44,4 +45,15 @@ public class CashbackFeatureTest {
 
         assertEquals(1, audit.getLogs().size());
     }
+    @Test
+    void cashbackDescriptionIsAdded() {
+        Account acc = new Account(1, "Test", AccountType.SAVING, 1000, 0);
+
+        AccountFeature feature =
+                new CashbackFeature(new AccountFeatureAdapter(acc));
+
+        assertTrue(feature.getDescription().contains("Cashback"));
+    }
+
+
 }

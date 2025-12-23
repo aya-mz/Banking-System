@@ -14,11 +14,9 @@ public class TicketDashboard {
         this.reportStrategy = strategy;
     }
 
-    // الدالة التي طلبتها: تجمع الإحصائيات مع الملخص في List<String>
     public List<String> getTicketsFullSummary() {
         List<String> report = new ArrayList<>();
 
-        // 1. إضافة إحصائيات التذاكر (Stats)
         report.add("====================================");
         report.add("      TICKETS SYSTEM DASHBOARD      ");
         report.add("====================================");
@@ -28,7 +26,6 @@ public class TicketDashboard {
         report.add("• Closed Tickets:   " + ticketRepository.filterByStatus("closed").size());
         report.add("------------------------------------");
 
-        // 2. إضافة ملخص كل تذكرة (Summary باستخدام الـ Adapter)
         report.add("        DETAILED TICKETS LIST        ");
         report.add("------------------------------------");
 

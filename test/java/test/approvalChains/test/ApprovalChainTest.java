@@ -36,7 +36,7 @@ public class ApprovalChainTest {
         normalUser = new User(2, "user@test.com", Role.CUSTOMER,
                 new AuthInfo("user123"), null);
 
-        // Chain
+
         ApprovalHandler teller = new TellerHandler();
         ApprovalHandler manager = new ManagerHandler();
         ApprovalHandler admin = new AdminHandler();
