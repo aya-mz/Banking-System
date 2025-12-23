@@ -20,7 +20,7 @@ class UserTest {
                 "123456789"
         );
 
-        User user = new User("1", "aya@test.com", Role.MANAGER, auth, profile);
+        User user = new User(1, "aya@test.com", Role.MANAGER, auth, profile);
 
         assertEquals("aya@test.com", user.getEmail());
         assertEquals(Role.MANAGER, user.getRole());
@@ -39,7 +39,7 @@ class UserTest {
                 "123456789"
         );
 
-        User user = new User("1", "aya@test.com", Role.MANAGER, auth, profile);
+        User user = new User(1, "aya@test.com", Role.MANAGER, auth, profile);
 
         UserRepository repo = new UserRepository();
         repo.save(user);

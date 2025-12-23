@@ -125,4 +125,13 @@ public class AccountGroup extends Account implements AccountComponentInterface {
                 ", updateAt=" + getUpdateAt() +
                 '}';
     }
+
+    @Override
+    public void setState(AccountStateInterface state) {
+        super.setState(state);
+
+        for (Account child : children) {
+            child.setState(state);
+        }
+    }
 }

@@ -2,13 +2,13 @@ package core.user;
 
 public class User {
 
-    private final String id;
+    private final int id;
     private final String email;
     private Role role;
     private AuthInfo authInfo;
     private UserProfile userProfile;
 
-    public User(String id, String email, Role role, AuthInfo authInfo, UserProfile userProfile) {
+    public User(int id, String email, Role role, AuthInfo authInfo, UserProfile userProfile) {
         this.id = id;
         this.email = email;
         this.role = role;
@@ -16,7 +16,7 @@ public class User {
         this.userProfile = userProfile;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

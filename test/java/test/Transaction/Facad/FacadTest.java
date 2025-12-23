@@ -50,8 +50,8 @@ class FacadTest {
         sender = new Account(1, "Sender", AccountType.CHECKING, 15000, 1234);
         receiver = new Account(2, "Receiver", AccountType.SAVING, 1000, 0);
 
-        adminUser = new User("1", "admin@test.com", Role.ADMIN, new AuthInfo("admin123"), null);
-        normalUser = new User("2", "user@test.com", Role.CUSTOMER, new AuthInfo("user123"), null);
+        adminUser = new User(1, "admin@test.com", Role.ADMIN, new AuthInfo("admin123"), null);
+        normalUser = new User(2, "user@test.com", Role.CUSTOMER, new AuthInfo("user123"), null);
 
         // إنشاء Approval Chain
         ApprovalHandler teller = new TellerHandler();
