@@ -1,61 +1,102 @@
-package java.test.account.composite;
-
-import Transaction.dispatcher.TransactionDispatcher;
-import Transaction.observer.TransactionEventPublisher;
-import account.Account;
-import account.AccountGroup;
-import account.AccountType;
-import account.states.ClosedState;
-import Transaction.observer.AuditLogObserver;
+package account;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 
-public class AccountCompositeTest {
+class AccountCompositeTest {
 
-    @Test
-    void childAccountBlockedWhenParentIsClosed() {
+    private AccountComponent account1;
+    private AccountComponent account2;
+    private AccountGroup mainGroup;
+    private AccountGroup subGroup;
 
-        TransactionEventPublisher publisher = new TransactionEventPublisher();
-        AuditLogObserver audit = new AuditLogObserver();
-        publisher.subscribe(audit);
+    @BeforeEach
+    void setup() {
+        account1 = new AccountComponent(1, "Account 1", AccountType.SAVING, 100);
+        account2 = new AccountComponent(2, "Account 2", AccountType.CHECKING, 200);
 
-        TransactionDispatcher dispatcher =
-                new TransactionDispatcher(publisher);
-
-        Account parent =
-                new Account(1, "ParentAcc", AccountType.SAVING, 2000, 0);
-        parent.setState(ClosedState.getInstance());
-
-        Account child =
-                new Account(1, "ChildAcc", AccountType.SAVING, 500, parent.getAccount_id());
-
-        assertTrue(parent.getState().isClosed());
-
-        assertThrows(IllegalStateException.class, () -> {
-            dispatcher.dispatch(
-                    () -> parent.getState().handleWithdraw(parent),
-                    "WITHDRAW",
-                    "Withdraw from child while parent closed"
-            );
-        });
-
-        assertEquals(0, audit.getLogs().size());
+        mainGroup = new AccountGroup(10, "Main Group", AccountType.SAVING);
+        subGroup = new AccountGroup(11, "Sub Group", AccountType.CHECKING);
     }
 
-
-
     @Test
-    void groupReturnsSumOfChildrenBalances() {
-        Account acc1 = new Account(1, "A1", AccountType.SAVING, 1000, 0);
-        Account acc2 = new Account(1, "A2", AccountType.CHECKING, 2000, 0);
-
-        AccountGroup group = new AccountGroup(1, "Group", AccountType.CHECKING);
-
-        group.add(acc1);
-        group.add(acc2);
-
-        assertEquals(3000, group.getTotalBalance());
+    void testIndividualAccountIsLeaf() {
+        assertFalse(account1.isGroup());
+        assertEquals(100, account1.getTotalBalance());
+        assertTrue(account1.getChildren().isEmpty());
     }
 
+    @Test
+    void testAddAccountsToGroup() {
+        mainGroup.add(account1);
+        mainGroup.add(account2);
+
+        assertEquals(2, mainGroup.getChildren().size());
+    }
+
+    @Test
+    void testAddSubGroupToGroup() {
+        subGroup.add(account1);
+        mainGroup.add(subGroup);
+
+        assertEquals(1, mainGroup.getChildren().size());
+        assertEquals(100, mainGroup.getTotalBalance());
+    }
+
+    @Test
+    void testNestedGroupsTotalBalance() {
+        subGroup.add(account1);
+        subGroup.add(account2);
+        mainGroup.add(subGroup);
+
+        assertEquals(300, mainGroup.getTotalBalance());
+    }
+
+    @Test
+    void testRemoveAccountFromGroup() {
+        mainGroup.add(account1);
+        mainGroup.remove(account1);
+
+        assertTrue(mainGroup.getChildren().isEmpty());
+    }
+
+    @Test
+    void testFindChildById() {
+        account1.setAccount_id(1);
+        account2.setAccount_id(2);
+
+        subGroup.add(account1);
+        mainGroup.add(subGroup);
+        mainGroup.add(account2);
+
+        Account found = mainGroup.findChildById(1);
+        assertNotNull(found);
+        assertEquals("Account 1", found.getName());
+    }
+
+    @Test
+    void testTotalAccountsCount() {
+        subGroup.add(account1);
+        subGroup.add(account2);
+        mainGroup.add(subGroup);
+
+        assertEquals(4, mainGroup.getTotalAccountsCount());
+        // (MainGroup + SubGroup + 2 Accounts)
+    }
+
+    @Test
+    void testPreventAddNullAccount() {
+        assertThrows(IllegalArgumentException.class, () -> mainGroup.add(null));
+    }
+
+    @Test
+    void testPreventAddGroupToItself() {
+        assertThrows(IllegalArgumentException.class, () -> mainGroup.add(mainGroup));
+    }
+
+    @Test
+    void testLeafAddThrowsException() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> account1.add(account2));
+    }
 }
